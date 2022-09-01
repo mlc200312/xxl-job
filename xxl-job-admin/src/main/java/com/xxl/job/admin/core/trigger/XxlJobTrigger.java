@@ -1,11 +1,11 @@
 package com.xxl.job.admin.core.trigger;
 
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
+import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
-import com.xxl.job.admin.core.schedule.XxlJobDynamicScheduler;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.core.biz.ExecutorBiz;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -116,7 +116,7 @@ public class XxlJobTrigger {
         triggerParam.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
         triggerParam.setExecutorTimeout(jobInfo.getExecutorTimeout());
         triggerParam.setLogId(jobLog.getId());
-        triggerParam.setLogDateTim(jobLog.getTriggerTime().getTime());
+        triggerParam.setLogDateTime(jobLog.getTriggerTime().getTime());
         triggerParam.setGlueType(jobInfo.getGlueType());
         triggerParam.setGlueSource(jobInfo.getGlueSource());
         triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
@@ -192,7 +192,7 @@ public class XxlJobTrigger {
     public static ReturnT<String> runExecutor(TriggerParam triggerParam, String address){
         ReturnT<String> runResult = null;
         try {
-            ExecutorBiz executorBiz = XxlJobDynamicScheduler.getExecutorBiz(address);
+            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
             runResult = executorBiz.run(triggerParam);
         } catch (Exception e) {
             logger.error(">>>>>>>>>>> xxl-job trigger error, please check if the executor[{}] is running.", address, e);
